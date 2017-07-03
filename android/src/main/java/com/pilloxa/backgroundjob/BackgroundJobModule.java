@@ -118,10 +118,10 @@ public class BackgroundJobModule extends ReactContextBaseJavaModule implements L
         }
         mJobs.add(jobInfo);
 
-        if (!isAppInForeground()) {
+        // if (!isAppInForeground()) {
             scheduleJobs();
             startForegroundJob();
-        }
+        // }
 
     }
 
@@ -228,6 +228,12 @@ public class BackgroundJobModule extends ReactContextBaseJavaModule implements L
 
     private void startForegroundJob() {
         if (mJobBundle != null) {
+            final ReactInstanceManager reactInstanceManager =
+                    ((ReactApplication) getApplication())
+                            .getReactNativeHost()
+                            .getReactInstanceManager();
+            ReactContext reactContext =
+                    reactInstanceManager.getCurrentReactContext();            
             Intent service = new Intent(reactContext, HeadlessService.class);
             service.putExtras(mJobBundle);
             mService = service;
